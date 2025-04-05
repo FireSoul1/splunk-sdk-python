@@ -1434,7 +1434,7 @@ class ResponseReader(io.RawIOBase):
         return bytes_read
 
 
-def handler(key_file=None, cert_file=None, timeout=None, verify=False, context=None, proxy=None):
+def handler(key_file=None, cert_file=None, timeout=None, verify=False, context=None, proxies=None):
     """This class returns an instance of the default HTTP request handler using
     the values you provide.
 
@@ -1485,8 +1485,8 @@ def handler(key_file=None, cert_file=None, timeout=None, verify=False, context=N
         method = message.get("method", "GET")
         
         # have a proxy entry for the current scheme
-        if proxy.get(scheme):
-            connection = connect(scheme, *proxy.get(scheme).split(":"))
+        if proxies.get(scheme):
+            connection = connect(scheme, *(proxies.get(scheme).split(":")))
             connection.set_tunnel("www.python.org")
         else:
             connection = connect(scheme, host, port)
