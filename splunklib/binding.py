@@ -1208,9 +1208,9 @@ class HttpLib:
     """
 
     def __init__(self, custom_handler=None, verify=False, key_file=None, cert_file=None, context=None, retries=0,
-                 retryDelay=10):
+                 retryDelay=10, proxies=None):
         if custom_handler is None:
-            self.handler = handler(verify=verify, key_file=key_file, cert_file=cert_file, context=context)
+            self.handler = handler(verify=verify, key_file=key_file, cert_file=cert_file, context=context, proxies=proxies)
         else:
             self.handler = custom_handler
         self._cookies = {}
