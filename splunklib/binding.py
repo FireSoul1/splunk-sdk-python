@@ -1448,8 +1448,8 @@ def handler(key_file=None, cert_file=None, timeout=None, verify=False, context=N
     :type verify: ``Boolean``
     :param `context`: The SSLContext that can is used with the HTTPSConnection when verify=True is enabled and context is specified
     :type context: ``SSLContext``
-    :param `proxy`: A dictionary of possible proxies the handler can leverage
-    :type proxy: ``dict``
+    :param `proxies`: A dictionary of possible proxies the handler can leverage
+    :type proxies: ``dict``
     """
 
     def connect(scheme, host, port):
