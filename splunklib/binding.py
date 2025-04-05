@@ -1434,7 +1434,7 @@ class ResponseReader(io.RawIOBase):
         return bytes_read
 
 
-def handler(key_file=None, cert_file=None, timeout=None, verify=False, context=None):
+def handler(key_file=None, cert_file=None, timeout=None, verify=False, context=None, proxy=None):
     """This class returns an instance of the default HTTP request handler using
     the values you provide.
 
@@ -1447,7 +1447,9 @@ def handler(key_file=None, cert_file=None, timeout=None, verify=False, context=N
     :param `verify`: Set to False to disable SSL verification on https connections.
     :type verify: ``Boolean``
     :param `context`: The SSLContext that can is used with the HTTPSConnection when verify=True is enabled and context is specified
-    :type context: ``SSLContext`
+    :type context: ``SSLContext``
+    :param `proxy`: A dictionary of possible proxies the handler can leverage
+    :type proxy: ``dict``
     """
 
     def connect(scheme, host, port):
@@ -1481,8 +1483,13 @@ def handler(key_file=None, cert_file=None, timeout=None, verify=False, context=N
         for key, value in message["headers"]:
             head[key] = value
         method = message.get("method", "GET")
-
-        connection = connect(scheme, host, port)
+        
+        # have a proxy entry for the current scheme
+        if proxy.get(scheme):
+            connection = connect(scheme, *proxy.get(scheme).split(":"))
+            connection.set_tunnel("www.python.org")
+        else:
+            connection = connect(scheme, host, port)
         is_keepalive = False
         try:
             connection.request(method, path, body, head)
